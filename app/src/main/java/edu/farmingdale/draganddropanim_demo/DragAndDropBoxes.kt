@@ -5,6 +5,7 @@ package edu.farmingdale.draganddropanim_demo
 import android.content.ClipData
 import android.content.ClipDescription
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -69,6 +70,13 @@ import androidx.compose.ui.unit.sp
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
     Column(modifier = Modifier.fillMaxSize()) {
 
+
+        var selectedAnimation by remember { mutableStateOf("rotate") }
+
+
+        var moveX by remember { mutableStateOf(0f) }
+        var moveY by remember { mutableStateOf(0f) }
+
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -95,6 +103,16 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                             target = remember {
                                 object : DragAndDropTarget {
                                     override fun onDrop(event: DragAndDropEvent): Boolean {
+                                        moveX = when(index){
+                                            0 -> +30f
+                                            1 -> -30f
+                                            else -> +0f
+                                        }
+                                        moveY = when(index){
+                                            2 -> +30f
+                                            3 -> -30f
+                                            else -> +0f
+                                        }
 
                                         dragBoxIndex = index
                                         return true
@@ -145,8 +163,26 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             )
         )
 
-        var moveX by remember { mutableStateOf(0f) }
-        var moveY by remember { mutableStateOf(0f) }
+        val fadeInOut = rememberInfiniteTransition()
+        val fadeIt by fadeInOut.animateFloat(
+            initialValue = 1f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Restart
+            )
+        )
+
+
+        val stretchSize by animateFloatAsState(
+            targetValue = 2f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+
+
 
         Box(
             modifier = Modifier
@@ -159,7 +195,14 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                     .size(50.dp)
                     .offset(moveX.dp, moveY.dp)
                     .graphicsLayer {
-                        rotationZ = rotationAngle
+                        when(selectedAnimation){
+                            "rotate" -> rotationZ = rotationAngle
+                            "stretch" -> {
+                                scaleX = stretchSize
+                                scaleY = stretchSize
+                            }
+                            "fade" -> alpha = fadeIt
+                        }
                     }
                     .background(Color.Green)
                     .align(Alignment.Center)
