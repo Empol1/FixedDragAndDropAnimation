@@ -44,8 +44,14 @@ import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -129,8 +135,8 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
 
-        val infiniteTransition = rememberInfiniteTransition()
-        val rotationAngle by infiniteTransition.animateFloat(
+        val repeatRotate = rememberInfiniteTransition()
+        val rotationAngle by repeatRotate.animateFloat(
             initialValue = 0f,
             targetValue = 360f,
             animationSpec = infiniteRepeatable(
@@ -138,6 +144,10 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                 repeatMode = RepeatMode.Restart
             )
         )
+
+        var moveX by remember { mutableStateOf(0f) }
+        var moveY by remember { mutableStateOf(0f) }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,12 +157,60 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(50.dp)
+                    .offset(moveX.dp, moveY.dp)
                     .graphicsLayer {
                         rotationZ = rotationAngle
                     }
                     .background(Color.Green)
                     .align(Alignment.Center)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(horizontalArrangement = Arrangement.Center) {
+                Button(
+                    onClick = { moveX -= 30f }
+                ) {
+                    Text("Left")
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { moveY -= 30f }
+                ) {
+                    Text("Up")
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { moveY += 30f }
+                ) {
+                    Text("Down")
+
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { moveX += 30f }
+                ) {
+                    Text("Right")
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = {
+                        moveX = 0f
+                        moveY = 0f
+                    }
+                ) {
+                    Text("Reset")
+                }
+
+
+            }
         }
     }
 }
