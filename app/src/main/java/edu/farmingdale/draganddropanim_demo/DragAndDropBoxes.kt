@@ -92,7 +92,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                                         moveX = when (index) {
                                             0 -> +30f
                                             1 -> -30f
-                                            else -> +0f
+                                            else -> +0f            //movement logic
                                         }
                                         moveY = when (index) {
                                             2 -> +30f
@@ -174,7 +174,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             )
 
             Box(
-                modifier = Modifier
+                modifier = Modifier       //the button that will be moving around
                     .size(60.dp)
                     .offset(moveX.dp, moveY.dp)
                     .graphicsLayer {
@@ -246,7 +246,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         Text("Down")
                     }
                 }
-
+                                //button is outside the scope so it appears to the far right
                 Button(
                     onClick = {
                         moveX = 0f
