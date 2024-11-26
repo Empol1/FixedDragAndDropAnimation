@@ -27,9 +27,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-
-// This should be completed in a group setting
 // DONE Analyze the requirements for Individual Project 3
 // DONE Show the DragAndDropBoxes composable
 // DONE Change the circle to a rect
@@ -38,8 +35,8 @@ class MainActivity : ComponentActivity() {
 // DONE Rotate the rect around itself
 // DONE Move - translate the rect horizontally and vertically
 // DONE Add a button to reset the rect to the center of the screen
-// ToDo 9: Enable certain animation based on the drop event (like up or down)
-// ToDo 10: Make sure to commit for each one of the above and submit this individually
+// DONE Enable certain animation based on the drop event (like up or down)
+// DONE: Make sure to commit for each one of the above and submit this individually
 
 
 
